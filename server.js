@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');      
 
 const app = express();
 const port = 3000;
@@ -9,21 +10,25 @@ app.use(cors());
 app.use(express.json());
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-const budget = {
-  myBudget: [
-    { title: 'Eat out',  budget: 25 },
-    { title: 'Rent',     budget: 275 },
-    { title: 'Grocery',  budget: 110 },
-    { title: 'Gas',      budget: 90 }
-  ]
-};
+app.get('/budget', (req, res) => {
+  const filePath = path.join(__dirname, 'budget.json');
+  fs.readFile(filePath, 'utf8', (err, text) => {
+    if (err) {
+      console.error('Failed to read budget.json:', err);
+      return res.status(500).json({ error: 'Unable to load budget data' });
+    }
+    try {
+      const data = JSON.parse(text);
+      return res.json(data);
+    } catch (e) {
+      console.error('Invalid JSON in budget.json:', e);
+      return res.status(500).json({ error: 'Invalid budget data' });
+    }
+  });
+});
 
 app.get('/hello', (req, res) => {
   res.send('Hello World!');
-});
-
-app.get('/budget', (req, res) => {
-  res.json(budget);
 });
 
 app.listen(port, () => {

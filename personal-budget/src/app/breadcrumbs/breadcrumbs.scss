@@ -1,0 +1,12 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .95rem;
+  padding: .5rem 0 1rem;
+  color: rgb(38, 82, 241);
+}
+.crumb { text-decoration: none; color: #0091e6; }
+.crumb:hover { text-decoration: underline; }
+.sep { opacity: .5; }
+.current { color: #222; font-weight: 600; }
